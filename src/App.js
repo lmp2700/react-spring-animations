@@ -1,25 +1,33 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Transition, animated } from 'react-spring';
+import Component1 from './components/component1';
+import Component2 from './components/component2';
+import Component3 from './components/component3';
 
 class App extends Component {
+  state = {
+    showComponent3: false
+  }
+  toggle = e => this.setState({ showComponent3: !this.state.showComponent3 });
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <Component1 />
+        <Component2 toggle={this.toggle} />
+        <Transition
+          native
+          items={this.state.showComponent3}
+          from={{ opacity: 0 }}
+          enter={{ opacity: 1 }}
+          leave={{ opacity: 0 }}
+        >
+          {show => show && (props => (
+            <animated.div style={props}>
+              <Component3 />
+            </animated.div>
+          ))}
+        </Transition>
       </div>
     );
   }
